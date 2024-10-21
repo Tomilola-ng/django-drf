@@ -1,12 +1,12 @@
 """ User Account Views """
 
-from rest_framework import generics
+from rest_framework import generics, response, status, permissions, views
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from django.conf import settings
 
 from accounts.models import UserAccount
-from accounts.serializers import LoginUserSerializer, CreateUserSerializer
+from accounts.serializers import LoginUserSerializer, CreateUserSerializer, UserSerializer
 
 
 class LoginUserView(TokenObtainPairView):
@@ -43,7 +43,9 @@ class LoginUserView(TokenObtainPairView):
                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite=settings.AUTH_COOKIE_SAMESITE
             )
-        return data
+
+        return response.Response({"message": "Login Successful",
+                                  "data": data.data}, status=status.HTTP_200_OK)
 
 
 class RegisterUserView(generics.CreateAPIView):
@@ -52,3 +54,26 @@ class RegisterUserView(generics.CreateAPIView):
     """
     queryset = UserAccount.objects.all()
     serializer_class = CreateUserSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        """ Post Request """
+        data = super().post(request, *args, **kwargs)
+        return response.Response({"message": "User Created",
+                                  "data": data.data}, status=status.HTTP_201_CREATED)
+
+
+class CurrentUserView(views.APIView):
+    """
+        Get the current user
+    """
+    queryset = UserAccount.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):  # pylint: disable=unused-argument
+        """ Get Request """
+        user = request.user
+        data = self.serializer_class(user)
+        return response.Response({"message": "User Retrieved",
+                                  "data": data.data}, status=status.HTTP_200_OK)

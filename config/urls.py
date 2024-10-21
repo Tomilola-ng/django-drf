@@ -10,7 +10,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from helpers.views import ImageAssetViewSet
-from accounts.views import LoginUserView, RegisterUserView
+from accounts.views import LoginUserView, RegisterUserView, CurrentUserView
 # Import more API Views here
 from config.swagger import urlpatterns as swagger
 
@@ -27,6 +27,8 @@ urlpatterns = [
 
     path('api/v1/auth/login/', LoginUserView.as_view(), name='login-user'),
     path('api/v1/auth/register/', RegisterUserView.as_view(), name='register-user'),
+    path('api/v1/auth/current-user',
+         CurrentUserView.as_view(), name='current-user'),
 
     # API DOCUMENTAION
     path('', include(swagger)),
