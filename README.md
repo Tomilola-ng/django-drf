@@ -9,7 +9,7 @@
 
 🚀 A ready-to-use Django + Django REST Framework (DRF) template for building scalable RESTful APIs.
 
-Pre-configured with essential features like authentication, permissions, pagination, and more, so you can jumpstart your next project with ease. Perfect for rapid API development and clean architecture.
+Pre-configured with essential features like authentication, permissions, pagination, and more, you can jumpstart your next project easily. Perfect for rapid API development and clean architecture.
 
 ## Features
 
